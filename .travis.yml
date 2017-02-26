@@ -1,14 +1,11 @@
 sudo: required
 
-language: php
-
 services:
   - docker
 
 before_install:
-- composer install
-- docker-compose -f docker-compose.test.yml up -d
-- docker-compose -f docker-compose.test.yml exec php sh
+  - docker run --rm -v $(pwd):/app composer/composer install
+  - docker-compose -f docker-compose.test.yml up -d
 
 script:
-- php ./vendor/bin/phpunit
+  - docker-compose -f docker-compose.test.yml exec -T php ./vendor/bin/phpunit
